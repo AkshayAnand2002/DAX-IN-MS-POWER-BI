@@ -1,0 +1,42 @@
+Total Amount = sum(sales[Amount]) 
+Total Boxes = sum(sales[Boxes])
+Shipment Count = COUNTROWS(sales)
+Amount per shipment = sum(sales[Amount])/countrows(sales)
+Amount per shipment 2 = [Total Amount]/[Shipment Count]
+#the above statement uses the new measures created and does not do calculations gain.
+Amount per Boxes = [Total Amount]/[Total Boxes]
+#ABOVE 2 LINES USE MEASURES CREATED EARLIER AND HENCE EMPHASIZES THE REUSABILITY CONCEPT 
+#I.E. REUSING EARLIER MEASURES IN FURTHER CALCULATIONS.
+Amount per boxes 2 = divide([Total Amount],[Total Boxes],"NO BOXES")
+#divide() has ability to handle the case of division by 0 as we assign the alternate test here NO BOXES to handle that case.
+Shipment target achieved = if([Amount per shipment 2]>4800,"YES","NO")
+#if value > 4800 print YES else NO.
+Shipment target achived 2 = IF([Amount per shipment 2]>4800,"😊","😢")
+#for adding emoji, press windows key and . symbol key together.
+COUNT OF PRODUCTS = COUNTROWS(products)
+#the above gives same values even if slicers are applied .To make this correct we use distinctcount().
+COUNT OF PRODUCTS = DISTINCTCOUNT(sales[Product])
+LOW BOX SHIPMENT = CALCULATE([Shipment Count],sales[Boxes]<50)
+#CALCULATE() USED WITH FILTER THAT SALES OF BOXES < 50.
+LOW BOX SHIPMENT % = DIVIDE([LOW BOX SHIPMENT],[Shipment Count])
+#WHEN A MEASURE IS SELECTED WE GET OPTIONS FOR MEASURE TOOLS FROM THERE WE SELECT % TO GET % OF ABOVE VALUES.
+BAR SHIPMENT = CALCULATE([Shipment Count],products[Category]="Bars")
+#above calculates shipment count for product category as bars.
+BAR SHIPMENT % = DIVIDE([BAR SHIPMENT],[Shipment Count])
+WEEKDAY = WEEKDAY(sales[Date])
+#ABOVE TOOL CAN BE USED IN TABLE AREA , INSIDE TABLE TOOLS WE CAN ADD NEW COLUMN AND WRITE ABOVE DAX COMMAND.
+#IT IS USED TO WEEKDAY NO. CORRESPONDING TO DATE.
+FRIDAY AMOUNT = CALCULATE([Total Amount],sales[WEEKDAY]=6)
+#ABOVE CALCULATES TOTAL AMOUNT GENERATED ON FRIDAY AS WE HAVE APPLIED FILTER OF WEEKDAY IN TABLES WHICH IS USED HERE.
+#NOW BELOW WE WANT TO CALCULATE SALES AMOUNT CORRESPONDING TO EITHER AUSTRALIA OR NEW ZEALAND ; FOR OR , + IS USED.
+NZAU SALES AMOUNT = 
+    VAR NZAMOUNT=CALCULATE([Total Amount],locations[Geo]="New Zealand")
+    VAR AUAMOUNT=CALCULATE([Total Amount],locations[Geo]="Australia")
+RETURN
+    NZAMOUNT+AUAMOUNT
+########################################################################ABOVE COMMAND IS USED FOR THAT.
+NZAU SALES 2 = CALCULATE([Total Amount],locations[Geo] IN {"New Zealand","Australia"})
+##above command can also be written without using variables and using 'in'.
+###################################################
+https://www.youtube.com/watch?v=PQ5lALdFHCU
+################################################### 
